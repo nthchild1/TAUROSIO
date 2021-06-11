@@ -1,15 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import client from '../../client';
 
-const WalletItem = props => {
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'red',
+    margin: '10%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+});
+
+function WalletItem({item, prices}) {
+  const {coin, coin_name, coin_icon, balances} = item;
+  const navigation = useNavigation();
+
+  const coinPrice = prices.find(price => price.market === `${item.coin}-MXN`);
+
+  console.log(balances);
+
   return (
-    <View>
-      <Text>Hola</Text>
-    </View>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        navigation.navigate('WalletDetails', {...item});
+      }}>
+      <Image source={{uri: coin_icon}} style={{width: 20, height: 20}} />
+      <View>
+        <Text>{coin}</Text>
+        <Text>{coin_name}</Text>
+        {coinPrice?.last && <Text>Precio: {coinPrice?.last} MXN</Text>}
+        <Text>Balance: {balances.available}</Text>
+      </View>
+    </TouchableOpacity>
   );
-};
-
-WalletItem.propTypes = {};
+}
 
 export default WalletItem;

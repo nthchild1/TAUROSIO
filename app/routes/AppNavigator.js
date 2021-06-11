@@ -4,6 +4,7 @@ import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import Login from './Login/Login';
 import Wallets from './Wallets/Wallets';
+import WalletDetails from './WalletDetails/WalletDetails';
 
 const {Navigator, Screen} = createStackNavigator();
 
@@ -45,6 +46,7 @@ function AppNavigator() {
       }}>
       <Screen name="Login" component={Login} />
       <Screen name="Wallets" component={Wallets} />
+      <Screen name="WalletDetails" component={WalletDetails} />
     </Navigator>
   );
 }

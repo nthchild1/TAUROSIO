@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 import client from '../../../src/client';
 import WalletItem from '../../../src/components/WalletItem/WalletItem';
 
@@ -21,34 +15,46 @@ const styles = StyleSheet.create({
     width: '90%',
     margin: '5%',
   },
+  contentContainerStyle: {
+    backgroundColor: 'pink',
+  },
 });
 
-function Wallets(props) {
+function Wallets({getWallets, getLastPrices}) {
   useEffect(() => {
-    console.log(props);
     setIsLoading(true);
-    props.getWallets().then(wallets => {
+    getWallets().then(wallets => {
       setWallets(wallets);
       setIsLoading(false);
+    });
+    getLastPrices().then(prices => {
+      setPrices(prices);
     });
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [wallets, setWallets] = useState([]);
-
-  console.log(wallets);
+  const [prices, setPrices] = useState([]);
 
   return (
     <View style={styles.AppContainer}>
       {isLoading && <ActivityIndicator size={'large'} color={'green'} />}
-      <FlatList
-        data={wallets}
-        renderItem={item => {
-          console.log(item);
-          return <WalletItem />;
-        }}
-      />
+      {wallets.length > 0 && prices.length > 0 && (
+        <FlatList
+          data={wallets}
+          renderItem={({item}) => (
+            <WalletItem
+              {...{
+                item,
+                prices,
+              }}
+              key={item.coin}
+            />
+          )}
+          contentContainerStyle={styles.contentContainerStyle}
+        />
+      )}
     </View>
   );
 }
@@ -69,6 +75,16 @@ Wallets.defaultProps = {
       .catch(e => {
         console.log(e.toJSON());
         return [];
+      });
+  },
+  getLastPrices: () => {
+    return client
+      .get('/api/v2/trading/ticker/')
+      .then(response => {
+        return response.data.data;
+      })
+      .catch(e => {
+        console.log(e.toJSON());
       });
   },
 };
