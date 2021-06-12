@@ -47,7 +47,12 @@ const TaurosTransferModal = ({coin, balances, handleBlockchainTransfer}) => {
               onChangeText={setDescription}
               value={description}
             />
-            <TextInput placeholder={'NIP'} onChangeText={setNIP} value={NIP} />
+            <TextInput
+              placeholder={'NIP'}
+              secureTextEntry={true}
+              onChangeText={setNIP}
+              value={NIP}
+            />
             <View style={{flexDirection: 'row'}}>
               <Pressable
                 style={[styles.button, styles.buttonOpen]}

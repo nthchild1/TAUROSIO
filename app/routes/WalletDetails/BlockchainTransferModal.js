@@ -54,7 +54,12 @@ const BlockchainTransferModal = ({
               onChangeText={setMessage}
               value={message}
             />
-            <TextInput placeholder={'NIP'} onChangeText={setNIP} value={NIP} />
+            <TextInput
+              placeholder={'NIP'}
+              onChangeText={setNIP}
+              secureTextEntry={true}
+              value={NIP}
+            />
             <View style={{flexDirection: 'row'}}>
               <Pressable
                 style={[styles.button, styles.buttonOpen]}
