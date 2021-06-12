@@ -1,8 +1,42 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import {
+  Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  TextInput,
+} from 'react-native';
+import client from '../../../src/client';
+import {err} from 'react-native-svg/lib/typescript/xml';
 
-const TaurosTransferModal = () => {
+const TaurosTransferModal = ({coin, balances}) => {
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [recipient, setRecipient] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [description, setDescription] = useState('');
+  const [NIP, setNIP] = useState('');
+
+  const {available} = balances;
+
+  const handleBlockchainTransfer = () => {
+    client
+      .post('/api/v3/wallets/inner-transfer/', {
+        coin,
+        recipient,
+        amount: quantity,
+        description,
+        nip: NIP,
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error.toJSON());
+      });
+  };
 
   return (
     <View style={styles.centeredView}>
@@ -11,17 +45,44 @@ const TaurosTransferModal = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
+            <Text style={styles.modalText}>Enviar {coin}</Text>
+            <Text style={styles.modalText}>Máximo: {available}</Text>
+            <TextInput
+              placeholder={'Correo electrónico'}
+              onChangeText={setRecipient}
+              value={recipient}
+            />
+            <TextInput
+              placeholder={'cantidad'}
+              onChangeText={setQuantity}
+              value={quantity}
+            />
+            <TextInput
+              placeholder={'descripción'}
+              onChangeText={setDescription}
+              value={description}
+            />
+            <TextInput placeholder={'NIP'} onChangeText={setNIP} value={NIP} />
+            <View style={{flexDirection: 'row'}}>
+              <Pressable
+                disabled={NIP.length !== 6}
+                style={NIP.length !== 6 ? styles.button : styles.buttonClose}
+                onPress={() => {
+                  handleBlockchainTransfer();
+                  setModalVisible(!modalVisible);
+                }}>
+                <Text style={styles.textStyle}>Enviar</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonOpen]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.textStyle}>Cancelar</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
@@ -62,10 +123,16 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#41b50c',
+    backgroundColor: '#e0dc00',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
   },
   buttonClose: {
     backgroundColor: '#2196F3',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
   },
   textStyle: {
     color: 'white',

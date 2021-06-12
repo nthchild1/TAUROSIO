@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#eaeaea',
   },
 });
 
@@ -37,11 +37,13 @@ function WalletDetails({getWalletAddress}) {
           alignContent: 'center',
           alignItems: 'center',
         }}>
-        {walletAddress && <QRCode value={walletAddress} />}
-        <Text>Recibir {coin_name}</Text>
+        {walletAddress && <QRCode size={200} value={walletAddress} />}
+        <Text style={{marginVertical: '5%', fontWeight: 'bold', fontSize: 15}}>
+          Recibir {coin_name}
+        </Text>
       </View>
-      <BlockchainTransferModal />
-      <TaurosTransferModal />
+      <BlockchainTransferModal {...{coin, balances}} />
+      <TaurosTransferModal {...{coin, balances}} />
     </View>
   );
 }

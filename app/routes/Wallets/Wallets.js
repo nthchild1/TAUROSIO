@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#eaeaea',
+    paddingTop: '30%',
   },
   TextInput: {
     backgroundColor: '#4f4f4f',
@@ -22,7 +23,13 @@ const styles = StyleSheet.create({
     margin: '5%',
   },
   contentContainerStyle: {
-    backgroundColor: 'pink',
+    backgroundColor: '#eaeaea',
+  },
+  CardText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    textAlign: 'center',
   },
 });
 
@@ -54,24 +61,40 @@ function Wallets({getWallets, getLastPrices}) {
   return (
     <View style={styles.AppContainer}>
       {isLoading && <ActivityIndicator size={'large'} color={'green'} />}
-      <View>
-        <Text>Balance: {combinedBalance}</Text>
+      <View
+        style={{
+          backgroundColor: 'black',
+          width: '80%',
+          height: '20%',
+          borderRadius: 20,
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          margin: '5%',
+        }}>
+        <Text style={styles.CardText}>Total Combinado:</Text>
+        <Text style={styles.CardText}>
+          {'\n'}${combinedBalance} MXN
+        </Text>
       </View>
-      {wallets.length > 0 && prices.length > 0 && (
-        <FlatList
-          data={wallets}
-          renderItem={({item}) => (
-            <WalletItem
-              {...{
-                item,
-                prices,
-              }}
-              key={item.coin}
-            />
-          )}
-          contentContainerStyle={styles.contentContainerStyle}
-        />
-      )}
+      <View style={{width: '100%', paddingHorizontal: '5%'}}>
+        <Text style={{fontSize: 20, textAlign: 'left'}}>Portafolio</Text>
+        {wallets.length > 0 && prices.length > 0 && (
+          <FlatList
+            data={wallets}
+            renderItem={({item}) => (
+              <WalletItem
+                {...{
+                  item,
+                  prices,
+                }}
+                key={item.coin}
+              />
+            )}
+            contentContainerStyle={styles.contentContainerStyle}
+          />
+        )}
+      </View>
     </View>
   );
 }

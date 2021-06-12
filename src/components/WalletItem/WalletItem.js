@@ -5,8 +5,10 @@ import client from '../../client';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     margin: '10%',
+    padding: '5%',
+    borderRadius: 15,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -19,20 +21,17 @@ function WalletItem({item, prices}) {
 
   const coinPrice = prices.find(price => price.market === `${item.coin}-MXN`);
 
-  console.log(balances);
-
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => {
         navigation.navigate('WalletDetails', {...item});
       }}>
-      <View>
+      <View style={{flexDirection: 'row'}}>
         <Image source={{uri: coin_icon}} style={{width: 20, height: 20}} />
         <Text>{coin}</Text>
       </View>
-      <View>
-        <Text>{coin_name}</Text>
+      <View style={{alignItems: 'flex-end'}}>
         {coinPrice?.last && <Text>Precio: {coinPrice?.last} MXN</Text>}
         <Text>Balance: {balances.available}</Text>
       </View>
