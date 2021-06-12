@@ -22,13 +22,6 @@ const BlockchainTransferModal = ({coin, balances}) => {
   const {available} = balances;
 
   const handleBlockchainTransfer = () => {
-    console.log({
-      coin,
-      address,
-      amount: parseFloat(quantity),
-      message,
-      nip: NIP,
-    });
     client
       .post('/api/v3/wallets/crypto-withdraw/', {
         coin,

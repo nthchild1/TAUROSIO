@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -52,14 +54,34 @@ function Wallets({getWallets, getLastPrices}) {
 
   useEffect(() => {
     const accumulatedbalance = wallets.reduce((accBalance, currentWallet) => {
-      return accBalance + Number.parseFloat(currentWallet.balances.available);
+      const coinPrice = prices.find(
+        price => price.market === `${currentWallet.coin}-MXN`,
+      );
+      if (!coinPrice) {
+        return accBalance;
+      }
+
+      return (
+        accBalance +
+        Number.parseFloat(currentWallet.balances.available * coinPrice.last)
+      );
     }, 0);
 
     setCombinedBalance(accumulatedbalance);
   }, [wallets]);
 
   return (
-    <View style={styles.AppContainer}>
+    <ScrollView
+      contentContainerStyle={styles.AppContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={isLoading}
+          onRefresh={() => {
+            getWallets();
+            getLastPrices();
+          }}
+        />
+      }>
       {isLoading && <ActivityIndicator size={'large'} color={'green'} />}
       <View
         style={{
@@ -95,7 +117,7 @@ function Wallets({getWallets, getLastPrices}) {
           />
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
