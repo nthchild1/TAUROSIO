@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,
@@ -8,9 +7,8 @@ import {
   View,
   TextInput,
 } from 'react-native';
-import client from '../../../src/client';
-import {err} from 'react-native-svg/lib/typescript/xml';
 import {useNavigation} from '@react-navigation/native';
+import taurosService from '../../../src/services/tauros.service';
 
 const TaurosTransferModal = ({coin, balances, handleBlockchainTransfer}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -86,54 +84,7 @@ const TaurosTransferModal = ({coin, balances, handleBlockchainTransfer}) => {
 };
 
 TaurosTransferModal.defaultProps = {
-  handleBlockchainTransfer: (
-    coin,
-    recipient,
-    quantity,
-    description,
-    NIP,
-    navigation,
-  ) => {
-    client
-      .post('/api/v3/wallets/inner-transfer/', {
-        coin,
-        recipient,
-        amount: quantity,
-        description,
-        nip: NIP,
-      })
-      .then(response => {
-        Alert.alert(
-          'Exito',
-          'Transferencia enviada exitosamente',
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-              onPress: navigation.goBack(),
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      })
-      .catch(error => {
-        Alert.alert(
-          'Error al enviar transferencia',
-          error.toJSON().message,
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      });
-  },
+  handleBlockchainTransfer: taurosService.handleBlockchainTransfer,
 };
 
 const styles = StyleSheet.create({

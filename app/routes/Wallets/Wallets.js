@@ -8,8 +8,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import client from '../../../src/client';
 import WalletItem from '../../../src/components/WalletItem/WalletItem';
+import taurosService from '../../../src/services/tauros.service';
 
 const styles = StyleSheet.create({
   AppContainer: {
@@ -122,33 +122,8 @@ function Wallets({getWallets, getLastPrices}) {
 }
 
 Wallets.defaultProps = {
-  getWallets: () => {
-    return client
-      .get('/api/v1/data/listbalances/')
-      .then(
-        ({
-          data: {
-            data: {wallets},
-          },
-        }) => {
-          return wallets;
-        },
-      )
-      .catch(e => {
-        console.log(e.toJSON());
-        return [];
-      });
-  },
-  getLastPrices: () => {
-    return client
-      .get('/api/v2/trading/ticker/')
-      .then(response => {
-        return response.data.data;
-      })
-      .catch(e => {
-        console.log(e.toJSON());
-      });
-  },
+  getWallets: taurosService.getWallets,
+  getLastPrices: taurosService.getLastPrices,
 };
 
 export default Wallets;

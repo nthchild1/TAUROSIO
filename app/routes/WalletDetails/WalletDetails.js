@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Image, StyleSheet, Text, View} from 'react-native';
 import {useRoute} from '@react-navigation/native';
-import client from '../../../src/client';
 import QRCode from 'react-native-qrcode-svg';
 import BlockchainTransferModal from './BlockchainTransferModal';
 import TaurosTransferModal from './TaurosTransferModal';
+import taurosService from '../../../src/services/tauros.service';
 
 const styles = StyleSheet.create({
   AppContainer: {
@@ -50,16 +50,7 @@ function WalletDetails({getWalletAddress}) {
 }
 
 WalletDetails.defaultProps = {
-  getWalletAddress: coin => {
-    return client
-      .get(`/api/v2/wallets/address/${coin}`)
-      .then(response => {
-        return response.data.payload.address;
-      })
-      .catch(e => {
-        console.log(e.toJSON());
-      });
-  },
+  getWalletAddress: taurosService.getWalletAddress,
 };
 
 export default WalletDetails;

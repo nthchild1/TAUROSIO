@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,
@@ -8,8 +7,8 @@ import {
   View,
   TextInput,
 } from 'react-native';
-import client from '../../../src/client';
 import {useNavigation} from '@react-navigation/native';
+import taurosService from '../../../src/services/tauros.service';
 
 const BlockchainTransferModal = ({
   coin,
@@ -142,54 +141,7 @@ const styles = StyleSheet.create({
 });
 
 BlockchainTransferModal.defaultProps = {
-  handleBlockchainTransfer: (
-    coin,
-    address,
-    quantity,
-    message,
-    NIP,
-    navigation,
-  ) => {
-    client
-      .post('/api/v3/wallets/crypto-withdraw/', {
-        coin,
-        address,
-        amount: quantity,
-        message,
-        nip: NIP,
-      })
-      .then(response => {
-        Alert.alert(
-          'Exito',
-          'Transferencia enviada exitosamente',
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-              onPress: navigation.goBack(),
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      })
-      .catch(error => {
-        Alert.alert(
-          'Error al enviar transferencia',
-          error.toJSON().message,
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      });
-  },
+  handleBlockchainTransfer: taurosService.handleBlockchainTransfer,
 };
 
 export default BlockchainTransferModal;

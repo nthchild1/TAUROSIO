@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import client from '../../../src/client';
+import taurosService from '../../../src/services/tauros.service';
 
 const styles = StyleSheet.create({
   AppContainer: {
@@ -60,34 +60,7 @@ function Login({handleLogin, navigation}) {
 }
 
 Login.defaultProps = {
-  handleLogin: (email, password) => {
-    return client
-      .post(
-        '/api/v3/auth/signin/',
-        {
-          email,
-          password,
-          device_name: 'iphone 11',
-          unique_device_id: 'TKY2048',
-        },
-        {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      )
-      .then(({data: {payload}}) => {
-        const {access} = payload;
-        client.interceptors.request.use(function (config) {
-          config.headers.Authorization = `JWT-V3 ${access}`;
-          return config;
-        });
-        return {success: true};
-      })
-      .catch(e => {
-        console.log(e.toJSON());
-        return {success: false};
-      });
-  },
+  handleLogin: taurosService.login,
 };
 
 export default Login;
