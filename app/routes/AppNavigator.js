@@ -25,9 +25,9 @@ const HeaderTitle = () => {
         navigation.dispatch(DrawerActions.openDrawer());
       }}>
       <Image
-        style={{width: 25, height: 25}}
+        style={{width: 150, height: 30}}
         source={{
-          uri: 'https://avatars.githubusercontent.com/u/36422238?s=280&v=4',
+          uri: 'https://pbs.twimg.com/media/E3pgBjqX0AECFHb?format=png&name=small',
         }}
       />
     </TouchableOpacity>
