@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import client from '../../../src/client';
 import {err} from 'react-native-svg/lib/typescript/xml';
+import {useNavigation} from '@react-navigation/native';
 
 const TaurosTransferModal = ({coin, balances}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,8 +19,8 @@ const TaurosTransferModal = ({coin, balances}) => {
   const [quantity, setQuantity] = useState('');
   const [description, setDescription] = useState('');
   const [NIP, setNIP] = useState('');
-
   const {available} = balances;
+  const navigation = useNavigation();
 
   const handleBlockchainTransfer = () => {
     client
@@ -31,7 +32,20 @@ const TaurosTransferModal = ({coin, balances}) => {
         nip: NIP,
       })
       .then(response => {
-        console.log(response);
+        Alert.alert(
+          'Exito',
+          'Transferencia enviada exitosamente',
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+              onPress: navigation.goBack(),
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
       })
       .catch(error => {
         Alert.alert(

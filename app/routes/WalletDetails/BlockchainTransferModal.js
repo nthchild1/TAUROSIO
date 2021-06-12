@@ -10,9 +10,12 @@ import {
 } from 'react-native';
 import client from '../../../src/client';
 import {err} from 'react-native-svg/lib/typescript/xml';
+import {useNavigation} from '@react-navigation/native';
 
 const BlockchainTransferModal = ({coin, balances}) => {
   const [modalVisible, setModalVisible] = useState(false);
+
+  const navigation = useNavigation();
 
   const [address, setAddress] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -31,7 +34,20 @@ const BlockchainTransferModal = ({coin, balances}) => {
         nip: NIP,
       })
       .then(response => {
-        console.log(response);
+        Alert.alert(
+          'Exito',
+          'Transferencia enviada exitosamente',
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+              onPress: navigation.goBack(),
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
       })
       .catch(error => {
         Alert.alert(
