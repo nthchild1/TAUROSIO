@@ -15,8 +15,7 @@
 yarn install
 ```
 
-3.
- Run
+3. Run
 
 ```
 yarn start
