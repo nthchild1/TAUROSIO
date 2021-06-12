@@ -27,9 +27,11 @@ function WalletItem({item, prices}) {
       onPress={() => {
         navigation.navigate('WalletDetails', {...item});
       }}>
-      <Image source={{uri: coin_icon}} style={{width: 20, height: 20}} />
       <View>
+        <Image source={{uri: coin_icon}} style={{width: 20, height: 20}} />
         <Text>{coin}</Text>
+      </View>
+      <View>
         <Text>{coin_name}</Text>
         {coinPrice?.last && <Text>Precio: {coinPrice?.last} MXN</Text>}
         <Text>Balance: {balances.available}</Text>
