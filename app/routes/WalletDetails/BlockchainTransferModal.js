@@ -9,10 +9,13 @@ import {
   TextInput,
 } from 'react-native';
 import client from '../../../src/client';
-import {err} from 'react-native-svg/lib/typescript/xml';
 import {useNavigation} from '@react-navigation/native';
 
-const BlockchainTransferModal = ({coin, balances}) => {
+const BlockchainTransferModal = ({
+  coin,
+  balances,
+  handleBlockchainTransfer,
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation();
@@ -23,48 +26,6 @@ const BlockchainTransferModal = ({coin, balances}) => {
   const [NIP, setNIP] = useState('');
 
   const {available} = balances;
-
-  const handleBlockchainTransfer = () => {
-    client
-      .post('/api/v3/wallets/crypto-withdraw/', {
-        coin,
-        address,
-        amount: quantity,
-        message,
-        nip: NIP,
-      })
-      .then(response => {
-        Alert.alert(
-          'Exito',
-          'Transferencia enviada exitosamente',
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-              onPress: navigation.goBack(),
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      })
-      .catch(error => {
-        Alert.alert(
-          'Error al enviar transferencia',
-          error.toJSON().message,
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      });
-  };
 
   return (
     <View style={styles.centeredView}>
@@ -105,7 +66,14 @@ const BlockchainTransferModal = ({coin, balances}) => {
                 disabled={NIP.length !== 6}
                 style={NIP.length !== 6 ? styles.button : styles.buttonClose}
                 onPress={() => {
-                  handleBlockchainTransfer();
+                  handleBlockchainTransfer(
+                    coin,
+                    address,
+                    quantity,
+                    message,
+                    NIP,
+                    navigation,
+                  );
                   setModalVisible(!modalVisible);
                 }}>
                 <Text style={styles.textStyle}>Enviar</Text>
@@ -172,5 +140,56 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+BlockchainTransferModal.defaultProps = {
+  handleBlockchainTransfer: (
+    coin,
+    address,
+    quantity,
+    message,
+    NIP,
+    navigation,
+  ) => {
+    client
+      .post('/api/v3/wallets/crypto-withdraw/', {
+        coin,
+        address,
+        amount: quantity,
+        message,
+        nip: NIP,
+      })
+      .then(response => {
+        Alert.alert(
+          'Exito',
+          'Transferencia enviada exitosamente',
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+              onPress: navigation.goBack(),
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
+      })
+      .catch(error => {
+        Alert.alert(
+          'Error al enviar transferencia',
+          error.toJSON().message,
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
+      });
+  },
+};
 
 export default BlockchainTransferModal;

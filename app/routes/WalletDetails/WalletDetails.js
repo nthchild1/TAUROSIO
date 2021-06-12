@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, Image, StyleSheet, Text, View} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import client from '../../../src/client';
 import QRCode from 'react-native-qrcode-svg';
@@ -12,6 +12,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#eaeaea',
+  },
+  QRContainer: {
+    margin: '5%',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -30,13 +36,8 @@ function WalletDetails({getWalletAddress}) {
   return (
     <View style={styles.AppContainer}>
       <Text style={{fontSize: 30, fontWeight: 'bold'}}>{coin_name}</Text>
-      <View
-        style={{
-          margin: '5%',
-          justifyContent: 'center',
-          alignContent: 'center',
-          alignItems: 'center',
-        }}>
+      <Image source={{uri: coin_icon}} style={{width: 50, height: 50}} />
+      <View style={styles.QRContainer}>
         {walletAddress && <QRCode size={200} value={walletAddress} />}
         <Text style={{marginVertical: '5%', fontWeight: 'bold', fontSize: 15}}>
           Recibir {coin_name}

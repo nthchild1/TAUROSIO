@@ -12,57 +12,14 @@ import client from '../../../src/client';
 import {err} from 'react-native-svg/lib/typescript/xml';
 import {useNavigation} from '@react-navigation/native';
 
-const TaurosTransferModal = ({coin, balances}) => {
+const TaurosTransferModal = ({coin, balances, handleBlockchainTransfer}) => {
   const [modalVisible, setModalVisible] = useState(false);
-
   const [recipient, setRecipient] = useState('');
   const [quantity, setQuantity] = useState('');
   const [description, setDescription] = useState('');
   const [NIP, setNIP] = useState('');
   const {available} = balances;
   const navigation = useNavigation();
-
-  const handleBlockchainTransfer = () => {
-    client
-      .post('/api/v3/wallets/inner-transfer/', {
-        coin,
-        recipient,
-        amount: quantity,
-        description,
-        nip: NIP,
-      })
-      .then(response => {
-        Alert.alert(
-          'Exito',
-          'Transferencia enviada exitosamente',
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-              onPress: navigation.goBack(),
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      })
-      .catch(error => {
-        Alert.alert(
-          'Error al enviar transferencia',
-          error.toJSON().message,
-          [
-            {
-              text: 'OK',
-              style: 'cancel',
-            },
-          ],
-          {
-            cancelable: true,
-          },
-        );
-      });
-  };
 
   return (
     <View style={styles.centeredView}>
@@ -103,7 +60,14 @@ const TaurosTransferModal = ({coin, balances}) => {
                 disabled={NIP.length !== 6}
                 style={NIP.length !== 6 ? styles.button : styles.buttonClose}
                 onPress={() => {
-                  handleBlockchainTransfer();
+                  handleBlockchainTransfer(
+                    coin,
+                    recipient,
+                    quantity,
+                    description,
+                    NIP,
+                    navigation,
+                  );
                   setModalVisible(!modalVisible);
                 }}>
                 <Text style={styles.textStyle}>Enviar</Text>
@@ -119,6 +83,57 @@ const TaurosTransferModal = ({coin, balances}) => {
       </Pressable>
     </View>
   );
+};
+
+TaurosTransferModal.defaultProps = {
+  handleBlockchainTransfer: (
+    coin,
+    recipient,
+    quantity,
+    description,
+    NIP,
+    navigation,
+  ) => {
+    client
+      .post('/api/v3/wallets/inner-transfer/', {
+        coin,
+        recipient,
+        amount: quantity,
+        description,
+        nip: NIP,
+      })
+      .then(response => {
+        Alert.alert(
+          'Exito',
+          'Transferencia enviada exitosamente',
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+              onPress: navigation.goBack(),
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
+      })
+      .catch(error => {
+        Alert.alert(
+          'Error al enviar transferencia',
+          error.toJSON().message,
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
+      });
+  },
 };
 
 const styles = StyleSheet.create({

@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import client from '../../client';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,9 +16,8 @@ const styles = StyleSheet.create({
 });
 
 function WalletItem({item, prices}) {
-  const {coin, coin_name, coin_icon, balances} = item;
+  const {coin, coin_icon, balances} = item;
   const navigation = useNavigation();
-
   const coinPrice = prices.find(price => price.market === `${item.coin}-MXN`);
 
   return (
