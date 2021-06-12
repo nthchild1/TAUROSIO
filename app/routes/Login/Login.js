@@ -43,6 +43,7 @@ function Login({handleLogin, navigation}) {
         placeholder={'password'}
         style={styles.TextInput}
         onChangeText={setPassword}
+        secureTextEntry={true}
       />
       <Button
         title={'Iniciar Sesión'}
