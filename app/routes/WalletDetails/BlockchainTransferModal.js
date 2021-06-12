@@ -34,7 +34,19 @@ const BlockchainTransferModal = ({coin, balances}) => {
         console.log(response);
       })
       .catch(error => {
-        console.log(error.toJSON());
+        Alert.alert(
+          'Error al enviar transferencia',
+          error.toJSON().message,
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
       });
   };
 
@@ -69,6 +81,11 @@ const BlockchainTransferModal = ({coin, balances}) => {
             <TextInput placeholder={'NIP'} onChangeText={setNIP} value={NIP} />
             <View style={{flexDirection: 'row'}}>
               <Pressable
+                style={[styles.button, styles.buttonOpen]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.textStyle}>Cancelar</Text>
+              </Pressable>
+              <Pressable
                 disabled={NIP.length !== 6}
                 style={NIP.length !== 6 ? styles.button : styles.buttonClose}
                 onPress={() => {
@@ -76,11 +93,6 @@ const BlockchainTransferModal = ({coin, balances}) => {
                   setModalVisible(!modalVisible);
                 }}>
                 <Text style={styles.textStyle}>Enviar</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonOpen]}
-                onPress={() => setModalVisible(false)}>
-                <Text style={styles.textStyle}>Cancelar</Text>
               </Pressable>
             </View>
           </View>
@@ -123,13 +135,13 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#e0dc00',
+    backgroundColor: '#30596b',
     borderRadius: 20,
     padding: 10,
     elevation: 2,
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#30596BFF',
     borderRadius: 20,
     padding: 10,
     elevation: 2,

@@ -34,7 +34,19 @@ const TaurosTransferModal = ({coin, balances}) => {
         console.log(response);
       })
       .catch(error => {
-        console.log(error.toJSON());
+        Alert.alert(
+          'Error al enviar transferencia',
+          error.toJSON().message,
+          [
+            {
+              text: 'OK',
+              style: 'cancel',
+            },
+          ],
+          {
+            cancelable: true,
+          },
+        );
       });
   };
 
@@ -69,6 +81,11 @@ const TaurosTransferModal = ({coin, balances}) => {
             <TextInput placeholder={'NIP'} onChangeText={setNIP} value={NIP} />
             <View style={{flexDirection: 'row'}}>
               <Pressable
+                style={[styles.button, styles.buttonOpen]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.textStyle}>Cancelar</Text>
+              </Pressable>
+              <Pressable
                 disabled={NIP.length !== 6}
                 style={NIP.length !== 6 ? styles.button : styles.buttonClose}
                 onPress={() => {
@@ -76,11 +93,6 @@ const TaurosTransferModal = ({coin, balances}) => {
                   setModalVisible(!modalVisible);
                 }}>
                 <Text style={styles.textStyle}>Enviar</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonOpen]}
-                onPress={() => setModalVisible(false)}>
-                <Text style={styles.textStyle}>Cancelar</Text>
               </Pressable>
             </View>
           </View>

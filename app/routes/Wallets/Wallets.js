@@ -68,7 +68,7 @@ function Wallets({getWallets, getLastPrices}) {
     }, 0);
 
     setCombinedBalance(accumulatedbalance);
-  }, [wallets]);
+  }, [wallets, isLoading, prices]);
 
   return (
     <ScrollView
